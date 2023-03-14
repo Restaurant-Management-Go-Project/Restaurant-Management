@@ -35,14 +35,14 @@ func main() {
 	routes.MenuRoutes(router)
 
 	router.Use(middleware.Authentication())
-	router.GET("/addtocart", app.AddToCart())
-	router.GET("/removeitem", app.RemoveItem())
-	router.GET("/listcart", controllers.GetItemFromCart())
+	router.GET("/addtocart", app.AddFoodToCart())
+	router.GET("/removeitem", app.RemoveFoodItem())
+	router.GET("/listcart", controllers.GetFoodFromCart())
 	router.POST("/addaddress", controllers.AddAddress())
 	router.PUT("/edithomeaddress", controllers.EditHomeAddress())
 	router.PUT("/editworkaddress", controllers.EditWorkAddress())
 	router.GET("/deleteaddresses", controllers.DeleteAddress())
-	router.GET("/cartcheckout", app.BuyFromCart())
+	router.GET("/cartcheckout", app.BuyFoodFromCart())
 	router.GET("/instantbuy", app.InstantBuy())
 
 	router.GET("/api-1", func(c *gin.Context) {
