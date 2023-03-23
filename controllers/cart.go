@@ -28,12 +28,12 @@ func NewApplication(fodCollection, userCollection *mongo.Collection) *Applicatio
 	}
 }
 
-func (app *Application) AddFoodToCart() gin.HandlerFunc {
+func (app *Application) AddToCart() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		foodQueryID := c.Query("id")
-		if foodQueryID == "" {
-			log.Println("food id is empty")
-			_ = c.AbortWithError(http.StatusBadRequest, errors.New("food id is empty"))
+		productQueryID := c.Query("id")
+		if productQueryID == "" {
+			log.Println("product id is empty")
+			_ = c.AbortWithError(http.StatusBadRequest, errors.New("product id is empty"))
 			return
 		}
 		userQueryID := c.Query("userID")
@@ -42,20 +42,22 @@ func (app *Application) AddFoodToCart() gin.HandlerFunc {
 			_ = c.AbortWithError(http.StatusBadRequest, errors.New("user id is empty"))
 			return
 		}
-		foodID, err := primitive.ObjectIDFromHex(foodQueryID)
+		productID, err := primitive.ObjectIDFromHex(productQueryID)
 		if err != nil {
 			log.Println(err)
 			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
-		var ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+		var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		err = database.AddFoodToCart(ctx, app.fodCollection, app.userCollection, foodID, userQueryID)
+		err = database.AddProductToCart(ctx, app.fodCollection, app.userCollection, productID, userQueryID)
 		if err != nil {
+			log.Println(err)
 			c.IndentedJSON(http.StatusInternalServerError, err)
+			return
 		}
-		c.IndentedJSON(200, "Successfully Added to the cart")
+		c.IndentedJSON(201, "Successfully Added to the cart")
 	}
 }
 

@@ -14,26 +14,26 @@ import (
 )
 
 var (
-	ErrCantFindFood     = errors.New("can't find food")
-	ErrCantDecodeFoods  = errors.New("can't find food")
-	ErrUserIDIsNotValid = errors.New("user is not valid")
-	ErrCantUpdateUser   = errors.New("cannot add food to cart")
-	ErrCantRemoveItem   = errors.New("cannot remove item from cart")
-	ErrCantGetItem      = errors.New("cannot get item from cart ")
-	ErrCantBuyCartItem  = errors.New("cannot update the purchase")
+	ErrCantFindProduct    = errors.New("can't find product")
+	ErrCantDecodeProducts = errors.New("can't find product")
+	ErrUserIDIsNotValid   = errors.New("user is not valid")
+	ErrCantUpdateUser     = errors.New("cannot add product to cart")
+	ErrCantRemoveItem     = errors.New("cannot remove item from cart")
+	ErrCantGetItem        = errors.New("cannot get item from cart ")
+	ErrCantBuyCartItem    = errors.New("cannot update the purchase")
 )
 
-func AddFoodToCart(ctx context.Context, fodCollection, userCollection *mongo.Collection, foodID primitive.ObjectID, userID string) error {
-	searchfromdb, err := fodCollection.Find(ctx, bson.M{"_id": foodID})
+func AddProductToCart(ctx context.Context, fodCollection, userCollection *mongo.Collection, productID primitive.ObjectID, userID string) error {
+	searchfromdb, err := fodCollection.Find(ctx, bson.M{"_id": productID})
 	if err != nil {
 		log.Println(err)
-		return ErrCantFindFood
+		return ErrCantFindProduct
 	}
-	var foodcart []models.Food
-	err = searchfromdb.All(ctx, &foodcart)
+	var productcart []models.FoodUser
+	err = searchfromdb.All(ctx, &productcart)
 	if err != nil {
 		log.Println(err)
-		return ErrCantDecodeFoods
+		return ErrCantDecodeProducts
 	}
 
 	id, err := primitive.ObjectIDFromHex(userID)
@@ -43,9 +43,10 @@ func AddFoodToCart(ctx context.Context, fodCollection, userCollection *mongo.Col
 	}
 
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	update := bson.D{{Key: "$push", Value: bson.D{primitive.E{Key: "usercart", Value: bson.D{{Key: "$each", Value: foodcart}}}}}}
+	update := bson.D{{Key: "$push", Value: bson.D{primitive.E{Key: "usercart", Value: bson.D{{Key: "$each", Value: productcart}}}}}}
 	_, err = userCollection.UpdateOne(ctx, filter, update)
 	if err != nil {
+		log.Println(err)
 		return ErrCantUpdateUser
 	}
 	return nil

@@ -35,23 +35,12 @@ func main() {
 	routes.MenuRoutes(router)
 
 	router.Use(middleware.Authentication())
-	router.GET("/addtocart", app.AddFoodToCart())
-	router.GET("/removeitem", app.RemoveFoodItem())
+	router.GET("/addtocart", app.AddToCart())
+	//router.DELETE("/removeitem", app.RemoveFoodItem())
 	router.GET("/listcart", controllers.GetFoodFromCart())
 	router.POST("/addaddress", controllers.AddAddress())
-	router.PUT("/edithomeaddress", controllers.EditHomeAddress())
-	router.PUT("/editworkaddress", controllers.EditWorkAddress())
-	router.GET("/deleteaddresses", controllers.DeleteAddress())
 	router.GET("/cartcheckout", app.BuyFoodFromCart())
 	router.GET("/instantbuy", app.InstantBuy())
-
-	router.GET("/api-1", func(c *gin.Context) {
-		c.JSON(200, gin.H{"success": "Access granted for api-1"})
-	})
-
-	router.GET("/api-2", func(c *gin.Context) {
-		c.JSON(200, gin.H{"success": "Access granted for api-2"})
-	})
 
 	router.Run(":" + port)
 }

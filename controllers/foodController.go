@@ -102,8 +102,6 @@ func CreateFood() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
-		food.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		food.ID = primitive.NewObjectID()
 		food.Food_id = food.ID.Hex()
 		var num = food.Price
@@ -166,9 +164,6 @@ func UpdateFood() gin.HandlerFunc {
 			}
 			updateObj = append(updateObj, bson.E{"menu", food.Price})
 		}
-
-		food.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		updateObj = append(updateObj, bson.E{"updated_at", food.Updated_at})
 
 		upsert := true
 		filter := bson.M{"food_id": foodId}
