@@ -106,6 +106,7 @@ func CreateFood() gin.HandlerFunc {
 		food.Food_id = food.ID.Hex()
 		var num = food.Price
 		food.Price = num
+		food.Reviews = make([]models.Review, 0)
 
 		result, insertErr := foodCollection.InsertOne(ctx, food)
 		if insertErr != nil {

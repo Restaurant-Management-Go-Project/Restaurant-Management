@@ -53,6 +53,7 @@ type FoodUser struct {
 	Food_image *string            `json:"food_image" validate:"required"`
 	Food_id    string             `json:"food_id"`
 	Menu_id    *string            `json:"menu_id" validate:"required"`
+	Reviews    []Review           `json:"reviews" bson:"reviews"`
 }
 
 type Food struct {
@@ -62,6 +63,7 @@ type Food struct {
 	Food_image *string            `json:"food_image" validate:"required"`
 	Food_id    string             `json:"food_id"`
 	Menu_id    *string            `json:"menu_id" validate:"required"`
+	Reviews    []Review           `json:"reviews" bson:"reviews"`
 }
 
 type Menu struct {
@@ -71,4 +73,10 @@ type Menu struct {
 	Created_at time.Time          `json:"created_at"`
 	Updated_at time.Time          `json:"updated_at"`
 	Menu_id    string             `json:"menu_id"`
+}
+
+type Review struct {
+	Title    string `json:"title"`
+	Rating   int    `json:"rating" bson:"rating"`
+	Comments string `json:"comments"`
 }
