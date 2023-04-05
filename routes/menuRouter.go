@@ -11,4 +11,5 @@ func MenuRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.Use(middleware.Authenticate())
 	incomingRoutes.GET("/menus/:menu_id", controller.GetMenu())
 	incomingRoutes.POST("/menus", controller.CreateMenu())
+	incomingRoutes.PATCH("/menus/:menu_id", controller.UpdateMenu())
 }
